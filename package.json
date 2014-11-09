@@ -1,0 +1,29 @@
+{
+  "name": "ssejson",
+  "version": "1.0.0",
+  "description": "Serialize and parse object streams over SSE/EventSource",
+  "main": "index.js",
+  "dependencies": {
+    "split2": "^0.2.1",
+    "stream-splicer": "^1.3.1",
+    "through2": "^0.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finnp/ssejson"
+  },
+  "keywords": [
+    "EventSource",
+    "SSe"
+  ],
+  "author": "Finn Pauls",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/finnp/ssejson/issues"
+  },
+  "homepage": "https://github.com/finnp/ssejson"
+}

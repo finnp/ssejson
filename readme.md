@@ -1,0 +1,52 @@
+# ssejson
+
+Serializing and parsing Object Streams for server sent events using the EventSource api.
+
+On the server side use `ssejson.serialize()` to turn the objectstream to sse, on the
+(browser) client use `ssejson.fromEventSource()` to parse it back to an objectstream.
+
+
+The format is pretty simple each object chunk is encoded as JSON as the name suggests
+and serialized and parsed by the module.
+
+## Serialize Example
+```js
+var http = require('http')
+var fs = require('fs')
+var ssejson = require('ssejson')
+var csv = require('csv-parser')
+http.createServer(function (req, res) {
+  fs.createReadStream('data.csv')
+    .pipe(csv())
+    .pipe(ssejson.serialize())
+    .pipe(res)
+})
+```
+
+## fromEventSource Example
+
+For the Use with browserify, but could be used with an EventSource replacement
+as well like (mafintosh module?).
+
+```js
+var htmltable = require('htmltable')
+var ssejson = require('ssejson')
+
+ssejson.fromEventSource(new EventSource('/'))
+  .pipe(htmltable(document.querySelector('#data')))
+```
+
+## Parse Example
+
+If you have access to the raw sse you can parse it this way
+
+```js
+  var request = require('request')
+  var ssejson = require('ssejson')
+  
+  request('/sse')
+    .pipe(ssejson.parse())
+    .on('data', function (row) {
+      console.log(row)
+    })
+```
