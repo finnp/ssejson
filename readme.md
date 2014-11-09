@@ -25,8 +25,8 @@ http.createServer(function (req, res) {
 
 ## fromEventSource Example
 
-For the Use with browserify, but could be used with an EventSource replacement
-as well like (mafintosh module?).
+For the Use with the browser `EventSource` api, but should also work with compliant replacements like the 
+[eventsource](https://www.npmjs.org/package/eventsource) module.
 
 ```js
 var htmltable = require('htmltable')
