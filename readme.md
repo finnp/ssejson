@@ -1,5 +1,9 @@
 # ssejson
 
+Windows | Mac/Linux
+------- | ---------
+[![Windows Build status](http://img.shields.io/appveyor/ci/finnp/ssejson.svg)](https://ci.appveyor.com/project/finnp/ssejson/branch/master) | [![Build Status](https://travis-ci.org/finnp/ssejson.svg?branch=master)](https://travis-ci.org/finnp/ssejson)
+
 Serializing and parsing Object Streams for server sent events using the EventSource api.
 
 On the server side use `ssejson.serialize()` to turn the objectstream to sse, on the
