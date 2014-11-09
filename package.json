@@ -1,6 +1,6 @@
 {
   "name": "ssejson",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Serialize and parse object streams over SSE/EventSource",
   "main": "index.js",
   "dependencies": {
