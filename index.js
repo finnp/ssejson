@@ -21,12 +21,14 @@ function fromEventSource(source) {
 }
 
 var through = require('through2')
-function serialize() {
+function serialize(opts) {
 
   return through.obj(function (data, enc, cb) {
+    if(opts.event) this.push('event: ' + opts.event + '\n')
     this.push('data: ' + JSON.stringify(data) + '\n\n')
     cb(null)
   })
+
 }
 
 var split = require('split2')

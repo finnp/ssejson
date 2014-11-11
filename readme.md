@@ -27,6 +27,10 @@ http.createServer(function (req, res) {
 })
 ```
 
+The serializer allows an options object to be passed as the first argument. There
+you can specify an `event` attribute and it will use the name you specify there instead
+of sending unnamed messages. However this is not supported from the parsing side yet.
+
 ## fromEventSource Example
 
 For the Use with the browser `EventSource` api, but should also work with compliant replacements like the 
