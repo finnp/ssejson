@@ -24,7 +24,7 @@ var through = require('through2')
 function serialize(opts) {
 
   return through.obj(function (data, enc, cb) {
-    if(opts.event) this.push('event: ' + opts.event + '\n')
+    if(opts && opts.event) this.push('event: ' + opts.event + '\n')
     this.push('data: ' + JSON.stringify(data) + '\n\n')
     cb(null)
   })
