@@ -49,6 +49,16 @@ test('parse', function (t) {
     }))
     stream.end('data: {"a":1}\n\nevent: other\ndata: {"fail": true}\n\ndata: {"b":2}\n\n')    
   })
+  
+  t.test('event: cat', function (t) {
+    var stream = ssejson.parse({event: 'cat'})
+    t.plan(2)
+    stream.pipe(concat(function (arr) {
+      t.equal(arr[0].a, 1)
+      t.equal(arr[1].b, 2)
+    }))
+    stream.end('event: cat\ndata: {"a":1}\n\nevent: dog\ndata: {"fail": 1}\n\nevent: cat\ndata: {"b":2}\n\ndata: false\n\n')
+  })
 })
 
 

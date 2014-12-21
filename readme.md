@@ -29,7 +29,7 @@ http.createServer(function (req, res) {
 
 The serializer allows an options object to be passed as the first argument. There
 you can specify an `event` attribute and it will use the name you specify there instead
-of sending unnamed messages. However this is not supported from the parsing side yet.
+of sending unnamed messages.
 
 ## fromEventSource Example
 
@@ -46,7 +46,8 @@ ssejson.fromEventSource(new EventSource('/'))
 
 ## Parse Example
 
-If you have access to the raw sse you can parse it this way
+If you have access to the raw sse you can parse it this way.
+You can specify the `event` option to parse named events.
 
 ```js
   var request = require('request')

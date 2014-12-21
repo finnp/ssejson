@@ -34,16 +34,23 @@ function serialize(opts) {
 var split = require('split2')
 var splicer = require('stream-splicer')
 
-var parse = function () {
+var parse = function (opts) {
+  opts = opts || {}
   return splicer.obj([
       split('\n\n'),
       through.obj(function (line, enc, cb) {
         // console.log(line.toString())
         line = line.toString()
-         if (line.indexOf('data: ') === 0) {
+        var message = line
+        if(opts.event) {
+          var parts = line.split('\n')
+          if(parts[0] != 'event: ' + opts.event) return cb(null) // next
+          message = parts[1]
+        }
+         if (message.indexOf('data: ') === 0) {
            var data
            try {
-             data = JSON.parse(line.slice(6))
+             data = JSON.parse(message.slice(6))
            } catch(e) {
              return cb(e)
            }
@@ -51,6 +58,7 @@ var parse = function () {
         cb(null, data)
       })
     ])
+
 }
   
 
