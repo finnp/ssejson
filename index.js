@@ -1,4 +1,8 @@
 var PassThrough = require('stream').PassThrough
+var through = require('through2')
+var split = require('split2')
+var splicer = require('stream-splicer')
+
 
 function fromEventSource(source, event) {
   
@@ -26,19 +30,28 @@ function fromEventSource(source, event) {
   return pass
 }
 
-var through = require('through2')
 function serialize(opts) {
   if(typeof opts === 'string') opts = {'event': opts}
-  return through.obj(function (data, enc, cb) {
+  var serializer = through.obj(function (data, enc, cb) {
     if(opts && opts.event) this.push('event: ' + opts.event + '\n')
     this.push('data: ' + JSON.stringify(data) + '\n\n')
     cb(null)
   })
-
+  
+  serializer.destroy = function (err) {
+    if (this._destroyed) return
+    this._destroyed = true
+    var self = this
+    process.nextTick(function () {
+      opts.event = 'error'
+      if(err) serializer.write({message: err.message})
+      self.emit('end')
+      self.emit('close')
+    })
+  }
+  
+  return serializer
 }
-
-var split = require('split2')
-var splicer = require('stream-splicer')
 
 var parse = function (opts) {
   opts = opts || {}

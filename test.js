@@ -27,6 +27,16 @@ test('serialize', function (t) {
     stream.write({b: 2})
     stream.end()
   })
+  
+  t.test('destroy with error', function (t) {
+    t.plan(1)
+    var stream = ssejson.serialize({event: false})
+    stream.pipe(concat(function (sse) {
+      t.equal(sse, 'data: {"a":1}\n\nevent: error\ndata: {"message":"omg"}\n\n')
+    }))
+    stream.write({a: 1})
+    stream.destroy(new Error('omg'))    
+  })
 })
 
 test('parse', function (t) {
