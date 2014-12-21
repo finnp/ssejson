@@ -63,28 +63,53 @@ test('parse', function (t) {
 
 
 test('fromEventSource', function (t) {
-  t.plan(3)
-  var server = http.createServer(function (req, res) {
-    var input = ssejson.serialize()
 
-    input
-      .pipe(ssejson.parse())
-      .pipe(ssejson.serialize())
-      .pipe(res)
+
+  t.test('onmessage', function (t) {
+    var server = http.createServer(function (req, res) {
+      var output = ssejson.serialize()
       
-    input.write({a: 1, b: 2})
-    input.write({a: 2, b: 3})
-    input.end()
+      output.pipe(res)
+      
+      output.write({a: 1, b: 2})
+      output.write({a: 2, b: 3})
+      output.end()
+    })
+    server.listen(8181)
+    
+    t.plan(3)
+    ssejson.fromEventSource(new EventSource('http://localhost:8181'))
+      .on('data', function (data) {
+        t.equal(data.a + 1, data.b)
+      })
+      .on('finish', function () {
+        t.pass('stream ends')
+        server.close()
+      })
   })
   
-  server.listen(8181)
-
-  ssejson.fromEventSource(new EventSource('http://localhost:8181'))
+  t.test('event: test', function (t) {
+    var server = http.createServer(function (req, res) {
+      var output = ssejson.serialize('test')
+      
+      output.pipe(res)
+      
+      output.write({a: 1, b: 2})
+      output.write({a: 2, b: 3})
+      output.end()
+    })
+    server.listen(8181)
+    t.plan(3)
+    ssejson.fromEventSource(new EventSource('http://localhost:8181'), 'test')
     .on('data', function (data) {
       t.equal(data.a + 1, data.b)
     })
     .on('finish', function () {
-      server.close()
       t.pass('stream ends')
+      server.close()
     })
+  })
+
+  
+
 })

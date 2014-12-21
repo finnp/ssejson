@@ -36,11 +36,14 @@ of sending unnamed messages.
 For the Use with the browser `EventSource` api, but should also work with compliant replacements like the 
 [eventsource](https://www.npmjs.org/package/eventsource) module.
 
+The second argument is optional and declares the name of the event. Without specifying
+it defaults to unnamed messages.
+
 ```js
 var htmltable = require('htmltable')
 var ssejson = require('ssejson')
 
-ssejson.fromEventSource(new EventSource('/'))
+ssejson.fromEventSource(new EventSource('/'), 'data')
   .pipe(htmltable(document.querySelector('#data')))
 ```
 

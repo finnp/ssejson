@@ -1,13 +1,19 @@
 var PassThrough = require('stream').PassThrough
 
-function fromEventSource(source) {
+function fromEventSource(source, event) {
   
   if(typeof source == 'string')
     source = new EventSource(source)
   
   var pass = new PassThrough({objectMode: true})
-
-  source.onmessage = function (e) {
+  
+  if(event) {
+    source.addEventListener(event, parse)
+  } else {
+    source.onmessage = parse
+  }
+  
+  function parse(e) {
     var message = JSON.parse(e.data)
     pass.write(message)
   }
@@ -22,7 +28,7 @@ function fromEventSource(source) {
 
 var through = require('through2')
 function serialize(opts) {
-
+  if(typeof opts === 'string') opts = {'event': opts}
   return through.obj(function (data, enc, cb) {
     if(opts && opts.event) this.push('event: ' + opts.event + '\n')
     this.push('data: ' + JSON.stringify(data) + '\n\n')
@@ -36,6 +42,7 @@ var splicer = require('stream-splicer')
 
 var parse = function (opts) {
   opts = opts || {}
+  if(typeof opts === 'string') opts = {'event': opts}
   return splicer.obj([
       split('\n\n'),
       through.obj(function (line, enc, cb) {
